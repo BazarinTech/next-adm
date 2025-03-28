@@ -1,3 +1,16 @@
+<?php 
+include 'includes/main.php';
+$error = '';
+$msg = '';
+if (isset($_POST['submit'])) {
+    $name= $_POST['name'];
+    $target = $_POST['target'];
+    $reward = $_POST['reward'];
+    $type = $_POST['type'];
+    $target_type = $_POST['target_type'];
+    $insert = $query->insert('bonus', ['name' => $name, 'target' => $target, 'reward' => $reward, 'type' => $type, 'target_type' => $target_type]);
+}
+?>
 <!DOCTYPE html>
 <html lang="en"  :dir="$store.app.direction" x-data="{ direction: $store.app.direction || 'ltr' }" x-bind:dir="direction" class="group/item" :data-mode="$store.app.mode" :data-sidebar="$store.app.sidebarMode">
 
@@ -6,7 +19,7 @@
 <head>
 
     <meta charset="utf-8">
-    <title>Starter Page | Sliced Pro - Tailwind CSS Admin & Dashboard Template</title>
+    <title>Bonus</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Tailwind CSS Admin & Dashboard Template" name="description">
     <meta content="SRBThemes" name="author">
@@ -60,9 +73,9 @@
                         <li class="text-xs dark:text-white/80">commodities controll</li>
                         <li class="text-xl font-semibold text-slate-800 dark:text-slate-100">Bonus</li>
                     </ul>
-                    <div x-data="modals">
+                    <div x-data="modals ">
                         <div class="flex items-center justify-center">
-                            <button type="button" class="btn bg-purple border border-purple rounded-md text-white transition-all duration-300 hover:bg-purple/[0.85] hover:border-purple/[0.85]" @click="toggle">Add new</button>
+                            <button type="button" class="btn <?= $isAdd ? '' : 'hidden' ?> bg-purple border border-purple rounded-md text-white transition-all duration-300 hover:bg-purple/[0.85] hover:border-purple/[0.85]" @click="toggle">Add new</button>
                         </div>
                         <div class="fixed inset-0 bg-black/80 z-[99999] hidden overflow-y-auto dark:bg-dark/90" :class="open && '!block'">
                             <div class="flex items-start justify-center min-h-screen px-4" @click.self="open = false">
@@ -76,33 +89,40 @@
                                             </svg>
                                         </button>
                                     </div>
-                                    <div class="p-5 space-y-4">
+                                    <form action='bonus' method='post' class="p-5 space-y-4">
                                         <div class="text-black dark:text-muted">
                                             <div class="space-y-1">
                                                 <label>Bonus Title</label>
-                                                <input type="text" class="form-input h-14" placeholder="name" required>
+                                                <input type="text" name='name' class="form-input h-14" placeholder="name" required>
                                             </div>
                                             <div class="space-y-1 my-4">
                                                 <label>Bonus Target</label>
-                                                <input type="number" class="form-input h-14" placeholder="price" required>
+                                                <input type="number" name='target' class="form-input h-14" placeholder="target" required>
                                             </div>
                                             <div class="space-y-1 my-4">
-                                                <label>Bonus Income</label>
-                                                <input type="number" class="form-input h-14" placeholder="income" required>
+                                                <label>Bonus Reward</label>
+                                                <input type="number" name='reward' class="form-input h-14" placeholder="reward" required>
                                             </div>
                                             <div class="space-y-1 my-4">
-                                                <label>Bonus Type</label>
-                                                <select name="" id="" class="form-input h-14">
-                                                    <option value="">Products</option>
-                                                    <option value="">Money</option>
+                                                <label>Reward Type</label>
+                                                <select name="type" id="" class="form-input h-14">
+                                                    <option value="products">Products</option>
+                                                    <option value="money">Money</option>
+                                                </select>
+                                            </div>
+                                            <div class="space-y-1 my-4">
+                                                <label>Target Type</label>
+                                                <select name="target_type" id="" class="form-input h-14">
+                                                    <option value="Users">Users</option>
+                                                    <option value="Active">Active</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="flex items-center justify-end gap-4">
                                             <button type="button" class="transition-all duration-300 border rounded-md btn text-danger border-danger hover:bg-danger hover:text-white" @click="toggle">Discard</button>
-                                            <button type="button" class="transition-all duration-300 border rounded-md btn text-purple border-purple hover:bg-purple hover:text-white">Save</button>
+                                            <button name='submit' class="transition-all duration-300 border rounded-md btn text-purple border-purple hover:bg-purple hover:text-white">Save</button>
                                         </div>
-                                    </div>
+                                      </form>
                                 </div>
                             </div>
                         </div>
@@ -116,121 +136,195 @@
                         <div class="card">
                         <h2 class="mb-4 text-base font-semibold capitalize text-slate-800 dark:text-slate-100">Bonus Records</h2>
                         
-                            <div class="overflow-auto" x-data="{ items: [
-                                { id: 1, name: 'Reach 100 users', target: '10', type: '50', income: 'Money', status: 'Active', time: '2025-13-3 12:00:00' },
-                              ]
-                            }">
-                                <caption class="caption-top">
-                                    <span class="text-muted">Double Click field To Edit Table.</span>
-                                </caption>
-                                <table class="min-w-[640px] w-full mt-4 table-hover">
-                                    <thead>
-                                        <tr class="ltr:text-left rtl:text-right">
-                                            <th>#</th>
-                                            <th>Bonus Name</th>
-                                            <th>Bonus Target</th>
-                                            <th>Bonus Type</th>
-                                            <th>Bonus Income</th>
-                                            <th>Status</th>
-                                            <th>Date Created</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <template x-for="item in items" :key="item.id">
-                                            <tr x-show="showElement" x-data="{ showElement: true }">
-                                                <td x-text="item.id"></td>
-                                                <td>
-                                                    <span x-text="item.name" x-on:dblclick="
-                                                        item.editing = true;
-                                                        $nextTick(() => $refs.name.focus());
-                                                    " x-show="!item.editing"></span>
-                                                    <input type="text" class="form-input" x-ref="name" x-model="item.name" x-on:keydown.enter="item.editing = false" x-show="item.editing">
-                                                </td>
-                                                <td>
-                                                    <span x-text="item.target" x-on:dblclick="
-                                                        item.editing = true;
-                                                        $nextTick(() => $refs.target.focus());
-                                                    " x-show="!item.editing"></span>
-                                                    <input type="text" class="form-input" x-ref="target" x-model="item.target" x-on:keydown.enter="item.editing = false" x-show="item.editing">
-                                                </td>
-                                                <td>
-                                                    <span x-text="item.type" x-on:dblclick="
-                                                        item.editing = true;
-                                                        $nextTick(() => $refs.type.focus());
-                                                    " x-show="!item.editing"></span>
-                                                    <input type="text" class="form-input" x-ref="type" x-model="item.type" x-on:keydown.enter="item.editing = false" x-show="item.editing">
-                                                </td>
-                                                <td>
-                                                    <span x-text="item.income" x-on:dblclick="
-                                                        item.editing = true;
-                                                        $nextTick(() => $refs.income.focus());
-                                                    " x-show="!item.editing"></span>
-                                                    <input type="text" class="form-input" x-ref="income" x-model="item.income" x-on:keydown.enter="item.editing = false" x-show="item.editing">
-                                                </td>
-                                                <td>
-                                                    <span x-text="item.status" x-on:dblclick="
-                                                            item.editing = true;
-                                                            $nextTick(() => $refs.status.focus());
-                                                        " x-show="!item.editing" class='bg-success/20 text-success px-2 rounded py-1'></span>
-                                                    <select class="form-select" x-ref="status" x-model="item.status" x-on:keydown.enter="item.editing = false" x-show="item.editing">
-                                                        <option>Active</option>
-                                                        <option>Inactive</option>
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <span x-text="item.time" x-on:dblclick="
-                                                        item.editing = true;
-                                                        $nextTick(() => $refs.time.focus());
-                                                    " x-show="!item.editing"></span>
-                                                    <input type="text" class="form-input" x-ref="time" x-model="item.time" x-on:keydown.enter="item.editing = false" x-show="item.editing">
-                                                </td>
-                                                <td>
-                                                    <button class="text-danger ltr:ml-2 rtl:mr-2" x-on:click="showElement = false">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="inline-block w-5 h-5">
-                                                            <path fill="currentColor" d="M17 6H22V8H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V8H2V6H7V3C7 2.44772 7.44772 2 8 2H16C16.5523 2 17 2.44772 17 3V6ZM18 8H6V20H18V8ZM9 11H11V17H9V11ZM13 11H15V17H13V11ZM9 4V6H15V4H9Z"></path>
-                                                        </svg>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        </template>
-                                    </tbody>
-                                    
-                                </table>
-                                <ul class="inline-flex items-center gap-1 m-auto mb-4 float-right mt-5">
-                                        <li>
-                                            <button type="button" class="flex justify-center px-2 py-2 text-black transition border rounded-full hover:text-white hover:bg-purple border-light hover:border-purple bg-light/50 dark:bg-white/5 dark:border-darkborder dark:text-white dark:hover:bg-purple dark:hover:border-purple dark:hover:text-white">
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5 mx-auto rtl:rotate-180">
-                                                    <path d="M4.83594 12.0001L11.043 18.2072L12.4573 16.793L7.66436 12.0001L12.4573 7.20718L11.043 5.79297L4.83594 12.0001ZM10.4858 12.0001L16.6929 18.2072L18.1072 16.793L13.3143 12.0001L18.1072 7.20718L16.6929 5.79297L10.4858 12.0001Z" fill="currentColor"></path>
-                                                </svg>
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <button type="button" class="flex justify-center px-2 py-2 text-black transition border rounded-full hover:text-white hover:bg-purple border-light hover:border-purple bg-light/50 dark:bg-white/5 dark:border-darkborder dark:text-white dark:hover:bg-purple dark:hover:border-purple dark:hover:text-white">
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5 mx-auto rtl:rotate-180">
-                                                    <path d="M10.8284 12.0007L15.7782 16.9504L14.364 18.3646L8 12.0007L14.364 5.63672L15.7782 7.05093L10.8284 12.0007Z" fill="currentColor"></path>
-                                                </svg>
-                                            </button>
-                                        </li>
-                                        <li><button type="button" class="flex justify-center px-3.5 py-2 rounded-full transition text-black hover:text-white hover:bg-purple border border-light hover:border-purple bg-light/50 dark:bg-white/5 dark:border-darkborder dark:text-white dark:hover:bg-purple dark:hover:border-purple dark:hover:text-white">1</button></li>
-                                        <li><button type="button" class="flex justify-center px-3.5 py-2 rounded-full transition text-white bg-purple border border-purple">2</button></li>
-                                        <li><button type="button" class="flex justify-center px-3.5 py-2 rounded-full transition text-black hover:text-white hover:bg-purple border border-light hover:border-purple bg-light/50 dark:bg-white/5 dark:border-darkborder dark:text-white dark:hover:bg-purple dark:hover:border-purple dark:hover:text-white">3</button></li>
-                                        <li>
-                                            <button type="button" class="flex justify-center px-2 py-2 text-black transition border rounded-full hover:text-white hover:bg-purple border-light hover:border-purple bg-light/50 dark:bg-white/5 dark:border-darkborder dark:text-white dark:hover:bg-purple dark:hover:border-purple dark:hover:text-white">
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5 mx-auto rtl:rotate-180">
-                                                    <path d="M13.1714 12.0007L8.22168 7.05093L9.63589 5.63672L15.9999 12.0007L9.63589 18.3646L8.22168 16.9504L13.1714 12.0007Z" fill="currentColor"></path>
-                                                </svg>
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <button type="button" class="flex justify-center px-2 py-2 text-black transition border rounded-full hover:text-white hover:bg-purple border-light hover:border-purple bg-light/50 dark:bg-white/5 dark:border-darkborder dark:text-white dark:hover:bg-purple dark:hover:border-purple dark:hover:text-white">
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5 mx-auto rtl:rotate-180">
-                                                    <path d="M19.1643 12.0001L12.9572 5.79297L11.543 7.20718L16.3359 12.0001L11.543 16.793L12.9572 18.2072L19.1643 12.0001ZM13.5144 12.0001L7.30728 5.79297L5.89307 7.20718L10.686 12.0001L5.89307 16.793L7.30728 18.2072L13.5144 12.0001Z" fill="currentColor"></path>
-                                                </svg>
-                                            </button>
-                                        </li>
-                                    </ul>
-                            </div>
+                        <div class="overflow-auto" x-data="{ 
+  items: <?= htmlspecialchars(json_encode($bonus_records), ENT_QUOTES, 'UTF-8') ?>,
+  searchTerm: '',
+  currentPage: 1,
+  itemsPerPage: 3,
+  
+  get filteredItems() {
+    if (!this.searchTerm) return this.items;
+    
+    const searchLower = this.searchTerm.toLowerCase();
+    return this.items.filter(item => 
+      item.name.toLowerCase().includes(searchLower) || 
+      item.target.toLowerCase().includes(searchLower) || 
+      item.type.toLowerCase().includes(searchLower) || 
+      item.income.toLowerCase().includes(searchLower) || 
+      item.status.toLowerCase().includes(searchLower) || 
+      item.time.toLowerCase().includes(searchLower)
+    );
+  },
+  
+  get totalPages() {
+    return Math.ceil(this.filteredItems.length / this.itemsPerPage);
+  },
+  
+  get paginatedItems() {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return this.filteredItems.slice(startIndex, endIndex);
+  },
+  
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  },
+  
+  prevPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  },
+  
+  goToPage(page) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+    }
+  },
+  
+  goToFirstPage() {
+    this.currentPage = 1;
+  },
+  
+  goToLastPage() {
+    this.currentPage = this.totalPages;
+  }
+}">
+  <div class="mb-4">
+    <input 
+      type="text" 
+      x-model="searchTerm" 
+      placeholder="Search..." 
+      class="form-input w-full md:w-64"
+    />
+  </div>
+  <caption class="caption-top">
+    <span class="text-muted">Double Click field To Edit Table.</span>
+  </caption>
+  <table class="min-w-[640px] w-full mt-4 table-hover">
+    <thead>
+      <tr class="ltr:text-left rtl:text-right">
+        <th>#</th>
+        <th>Bonus Name</th>
+        <th>Bonus Target</th>
+        <th>Target Type</th>
+        <th>Bonus Type</th>
+        <th>Bonus Income</th>
+        <th>Status</th>
+        <th>Date Created</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <template x-for="item in paginatedItems" :key="item.id">
+        <tr x-show="showElement" x-data="{ showElement: true }">
+          <td x-text="item.id"></td>
+          <td>
+            <span x-text="item.name" x-on:dblclick="
+              item.editing = <?= $isEdit ?>;
+              $nextTick(() => $refs.name.focus());
+            " x-show="!item.editing"></span>
+            <input type="text" class="form-input" x-ref="name" x-model="item.name" x-on:keydown.enter="item.editing = false; updater(item.id, 'name', item.name);" x-show="item.editing" />
+          </td>
+          <td>
+            <span x-text="item.target" x-on:dblclick="
+              item.editing = <?= $isEdit ?>;
+              $nextTick(() => $refs.target.focus());
+            " x-show="!item.editing"></span>
+            <input type="text" class="form-input" x-ref="target" x-model="item.target" x-on:keydown.enter="item.editing = false; updater(item.id, 'target', item.target);" x-show="item.editing" />
+          </td>
+          <td>
+            <span x-text="item.target_type" x-on:dblclick="
+              item.editing = <?= $isEdit ?>;
+              $nextTick(() => $refs.target_type.focus());
+            " x-show="!item.editing"></span>
+            <input type="text" class="form-input" x-ref="target" x-model="item.target_type" x-on:keydown.enter="item.editing = false; updater(item.id, 'target_type', item.target_type);" x-show="item.editing" />
+          </td>
+          <td>
+            <span x-text="item.type" x-on:dblclick="
+              item.editing = <?= $isEdit ?>;
+              $nextTick(() => $refs.type.focus());
+            " x-show="!item.editing"></span>
+            <input type="text" class="form-input" x-ref="type" x-model="item.type" x-on:keydown.enter="item.editing = false; updater(item.id, 'type', item.type);" x-show="item.editing" />
+          </td>
+          <td>
+            <span x-text="item.income" x-on:dblclick="
+              item.editing = <?= $isEdit ?>;
+              $nextTick(() => $refs.income.focus());
+            " x-show="!item.editing"></span>
+            <input type="number" class="form-input" x-ref="income" x-model="item.income" x-on:keydown.enter="item.editing = false; updater(item.id, 'reward', item.income);" x-show="item.editing" />
+          </td>
+          <td>
+            <span x-text="item.status" x-bind:class="item.status === 'Active' ? 'bg-success/20 text-success' : 'bg-danger/20 text-danger'" x-on:dblclick="
+                    item.editing = <?= $isEdit ?>;
+                    $nextTick(() => $refs.status.focus());
+                " x-show="!item.editing" class='px-2 rounded py-1'></span>
+            <select class="form-select" x-ref="status" x-model="item.status" x-on:keydown.enter="item.editing = false; updater(item.id, 'status', item.status);" x-show="item.editing">
+                <option value='Active'>Active</option>
+                <option value='Inactive'>Inactive</option>
+            </select>
+        </td>
+          <td>
+            <span x-text="item.time" x-on:dblclick="
+              item.editing = <?= $isEdit ?>;
+              $nextTick(() => $refs.time.focus());
+            " x-show="!item.editing"></span>
+            <input type="text" class="form-input" x-ref="time" x-model="item.time" x-on:keydown.enter="item.editing = false" x-show="item.editing" />
+          </td>
+          <td>
+            <button class="text-danger ltr:ml-2 rtl:mr-2" x-on:click="showElement = false; deleteItem('bonus', item.id)">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="inline-block w-5 h-5">
+                <path fill="currentColor" d="M17 6H22V8H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V8H2V6H7V3C7 2.44772 7.44772 2 8 2H16C16.5523 2 17 2.44772 17 3V6ZM18 8H6V20H18V8ZM9 11H11V17H9V11ZM13 11H15V17H13V11ZM9 4V6H15V4H9Z"></path>
+              </svg>
+            </button>
+          </td>
+        </tr>
+      </template>
+    </tbody>
+  </table>
+  <ul class="inline-flex items-center gap-1 m-auto mb-4 float-right mt-5">
+    <li>
+      <button type="button" x-on:click="goToFirstPage()" class="flex justify-center px-2 py-2 text-black transition border rounded-full hover:text-white hover:bg-purple border-light hover:border-purple bg-light/50 dark:bg-white/5 dark:border-darkborder dark:text-white dark:hover:bg-purple dark:hover:border-purple dark:hover:text-white">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5 mx-auto rtl:rotate-180">
+          <path d="M4.83594 12.0001L11.043 18.2072L12.4573 16.793L7.66436 12.0001L12.4573 7.20718L11.043 5.79297L4.83594 12.0001ZM10.4858 12.0001L16.6929 18.2072L18.1072 16.793L13.3143 12.0001L18.1072 7.20718L16.6929 5.79297L10.4858 12.0001Z" fill="currentColor"></path>
+        </svg>
+      </button>
+    </li>
+    <li>
+      <button type="button" x-on:click="prevPage()" class="flex justify-center px-2 py-2 text-black transition border rounded-full hover:text-white hover:bg-purple border-light hover:border-purple bg-light/50 dark:bg-white/5 dark:border-darkborder dark:text-white dark:hover:bg-purple dark:hover:border-purple dark:hover:text-white">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5 mx-auto rtl:rotate-180">
+          <path d="M10.8284 12.0007L15.7782 16.9504L14.364 18.3646L8 12.0007L14.364 5.63672L15.7782 7.05093L10.8284 12.0007Z" fill="currentColor"></path>
+        </svg>
+      </button>
+    </li>
+    <template x-for="page in totalPages" :key="page">
+      <li>
+        <button 
+          type="button" 
+          x-on:click="goToPage(page)" 
+          x-bind:class="{'flex justify-center px-3.5 py-2 rounded-full transition text-white bg-purple border border-purple': currentPage === page, 'flex justify-center px-3.5 py-2 rounded-full transition text-black hover:text-white hover:bg-purple border border-light hover:border-purple bg-light/50 dark:bg-white/5 dark:border-darkborder dark:text-white dark:hover:bg-purple dark:hover:border-purple dark:hover:text-white': currentPage !== page}"
+          x-text="page"
+        ></button>
+      </li>
+    </template>
+    <li>
+      <button type="button" x-on:click="nextPage()" class="flex justify-center px-2 py-2 text-black transition border rounded-full hover:text-white hover:bg-purple border-light hover:border-purple bg-light/50 dark:bg-white/5 dark:border-darkborder dark:text-white dark:hover:bg-purple dark:hover:border-purple dark:hover:text-white">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5 mx-auto rtl:rotate-180">
+          <path d="M13.1714 12.0007L8.22168 7.05093L9.63589 5.63672L15.9999 12.0007L9.63589 18.3646L8.22168 16.9504L13.1714 12.0007Z" fill="currentColor"></path>
+        </svg>
+      </button>
+    </li>
+    <li>
+      <button type="button" x-on:click="goToLastPage()" class="flex justify-center px-2 py-2 text-black transition border rounded-full hover:text-white hover:bg-purple border-light hover:border-purple bg-light/50 dark:bg-white/5 dark:border-darkborder dark:text-white dark:hover:bg-purple dark:hover:border-purple dark:hover:text-white">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5 mx-auto rtl:rotate-180">
+          <path d="M19.1643 12.0001L12.9572 5.79297L11.543 7.20718L16.3359 12.0001L11.543 16.793L12.9572 18.2072L19.1643 12.0001ZM13.5144 12.0001L7.30728 5.79297L5.89307 7.20718L10.686 12.0001L5.89307 16.793L7.30728 18.2072L13.5144 12.0001Z" fill="currentColor"></path>
+        </svg>
+      </button>
+    </li>
+  </ul>
+</div>
                         </div>
                     </div>
                 </div>
@@ -248,7 +342,40 @@
 <script  src="assets/libs/%40alpinejs/persist/cdn.min.js"></script>
 <script  src="assets/libs/%40alpinejs/collapse/cdn.min.js"></script>
 <script  src="assets/libs/feather-icons/feather.min.js"></script>
-
+<script>
+function updater(id, field, value) {
+    fetch('actions/update_bonus.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: id, field: field, value: value })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('User updated successfully');
+        } else {
+            console.error('Update failed:', data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+function deleteItem(table, id) {
+    fetch('actions/delete_record.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, table })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Record deleted successfully');
+        } else {
+            console.error('Deletion failed:', data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+</script>
 
 </body>
 

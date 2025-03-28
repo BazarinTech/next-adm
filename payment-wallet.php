@@ -1,3 +1,30 @@
+<?php 
+include 'includes/main.php';
+$error = '';
+$msg = '';
+if (isset($_POST['submit'])) {
+    $amount= $_POST['amount'];
+    $phone = $_POST['phone'];
+    $post_data = [
+        'amount' => (float) $amount,
+        'phone_number' => $phone,
+        "channel_id" => 1549, 
+        "provider" => "sasapay",
+        "network_code" => "63902", 
+        "external_reference" => "INV-009",
+        "customer_name" =>"John Doe",
+        "callback_url" => "https://example.com/callback.php"
+    ];
+
+    $initiate = $curl->request('https://backend.payhero.co.ke/api/v2/payments', 'POST', $post_data);
+
+    if (isset($initiate['error_code'])) {
+        $error = $initiate['error_message'];
+    }else{
+        $msg = "Payment Initiated Successfully";
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en"  :dir="$store.app.direction" x-data="{ direction: $store.app.direction || 'ltr' }" x-bind:dir="direction" class="group/item" :data-mode="$store.app.mode" :data-sidebar="$store.app.sidebarMode">
 
@@ -6,7 +33,7 @@
 <head>
 
     <meta charset="utf-8">
-    <title>Starter Page | Sliced Pro - Tailwind CSS Admin & Dashboard Template</title>
+    <title>Payment Wallet</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Tailwind CSS Admin & Dashboard Template" name="description">
     <meta content="SRBThemes" name="author">
@@ -64,18 +91,31 @@
                 <!-- Start All Card -->
                 <div class="flex flex-col gap-4 min-h-[calc(100vh-212px)]">
                     <div class="grid grid-cols-1 gap-4">
-                        <div class="card">
-                            <form action="">
+                    <div class="card">
+                            <form action="payment-wallet" method="post">
+                            <div class="w-full grid place-items-center">
+                                <?php 
+                                if ($msg) {
+                                    echo '<p class="bg-success/20 text-success text-center w-1/2 my-2 rounded-lg py-2 px-2">'.$msg.'</p>';
+                                }
+                                ?>
+
+                                <?php 
+                                if ($error) {
+                                    echo '<p class="bg-danger/20 text-danger text-center w-1/2 my-2 rounded-lg py-2 px-2">'.$error.'</p>';
+                                }
+                                ?>
+                            </div>
                             <h2 class="mb-4 text-base font-semibold capitalize text-slate-800 dark:text-slate-100">Recharge Payment Balance</h2>
                                 <div class="space-y-1">
                                     <label>Enter Amount to Recharge</label>
-                                    <input type="number" class="form-input h-14" placeholder="eg 500" required>
+                                    <input type="number" name='amount' class="form-input h-14" placeholder="eg 500" required>
                                 </div>
                                 <div class="space-y-1 my-4">
                                     <label>Phone number</label>
-                                    <input type="tel" class="form-input h-14" placeholder="phone" required>
+                                    <input type="tel" name='phone' class="form-input h-14" placeholder="eg 0712345678" required>
                                 </div>
-                                <button type="button" class="btn bg-purple border border-purple rounded-md text-white transition-all duration-300 hover:bg-purple/[0.85] hover:border-purple/[0.85]">Submit</button>
+                                <button type="submit" name='submit' class="btn bg-purple border border-purple rounded-md text-white transition-all duration-300 hover:bg-purple/[0.85] hover:border-purple/[0.85]">Submit</button>
                             </form>
                         </div>
                     </div>

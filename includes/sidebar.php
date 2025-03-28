@@ -82,7 +82,7 @@
                             <a href="javascript:void(0);" class="items-center justify-between text-black nav-link group" :class="{'active' : isActive('components')}" @click="toggle('components', false)">
                                 <div class="flex items-center">
                                     <i data-feather="box" class="size-4"></i>
-                                    <span class="ltr:pl-1.5 rtl:pr-1.5">Bank Wallets</span>
+                                    <span class="ltr:pl-1.5 rtl:pr-1.5">Topup Wallets</span>
                                 </div>
                                 <div class="flex items-center justify-center w-4 h-4 dropdown-icon" :class="{'!rotate-180' : isActive('components')}">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6">
@@ -103,8 +103,8 @@
                                 </div>
                             </a>
                         </li>
-                        <h2 class="my-2 text-sm text-slate-500 group-data-[sidebar=dark]/item:text-slate-500 group-data-[sidebar=brand]/item:text-sky-200"><span>Mangement</span></h2>
-                        <li class="menu nav-item">
+                        <h2 class="my-2 text-sm text-slate-500 group-data-[sidebar=dark]/item:text-slate-500 group-data-[sidebar=brand]/item:text-sky-200 <?= $isView ? '' : 'hidden' ?>"><span>Mangement</span></h2>
+                        <li class="menu nav-item <?= $isView ? '' : 'hidden' ?>">
                             <a href="admins" class="nav-link group" @click="toggle('single' , false)">
                                 <div class="flex items-center">
                                     <i data-feather="user-plus" class="size-4"></i>

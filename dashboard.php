@@ -1,3 +1,13 @@
+<?php 
+include 'includes/main.php';
+//payment wallet
+$response = $curl->request('https://backend.payhero.co.ke/api/v2/payment_channels/1549', 'GET');
+$payment_wallet = $response['balance_plain']['balance'];
+
+//service wallet
+$response = $curl->request('https://backend.payhero.co.ke/api/v2/wallets', 'GET');
+$service_wallet = $response['available_balance'];
+?>
 <!DOCTYPE html>
 <html lang="en"  :dir="$store.app.direction" x-data="{ direction: $store.app.direction || 'ltr' }" x-bind:dir="direction" class="group/item" :data-mode="$store.app.mode" :data-sidebar="$store.app.sidebarMode">
 
@@ -6,7 +16,7 @@
 <head>
 
     <meta charset="utf-8">
-    <title>CRM | Sliced Pro - Tailwind CSS Admin & Dashboard Template</title>
+    <title>Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Tailwind CSS Admin & Dashboard Template" name="description">
     <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
@@ -59,38 +69,38 @@
                 <nav class="w-full">
                     <ul class="space-y-2 detached-breadcrumb">
                         <li class="text-xs dark:text-white/80">Dashboard</li>
-                        <li class="text-xl font-semibold text-slate-800 dark:text-slate-100">Welcome, Bitech</li>
+                        <li class="text-xl font-semibold text-slate-800 dark:text-slate-100">Welcome, <?=$admin_uname?></li>
                     </ul>
                 </nav>                <!-- Start All Card -->
                 <div class="flex flex-col gap-4 min-h-[calc(100vh-212px)]">
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-3 xl:grid-cols-5">
                         <div class="card">
                             <p class="flex items-center gap-2 text-base dark:text-gray-300"><i data-feather="dollar-sign" class="size-4"></i> Payment Wallet</p>
-                            <h4 class="flex items-center gap-4 mt-3 text-2xl font-semibold text-slate-800 dark:text-slate-100">Kes 974.66
+                            <h4 class="flex items-center gap-4 mt-3 text-2xl font-semibold text-slate-800 dark:text-slate-100">Kes <?=number_format($payment_wallet, 2)?>
                             </h4>
                             <p class="mt-2 text-muted"><span class="font-semibold text-success">+$141k</span> than last month</p>
                         </div>
                         <div class="card">
                             <p class="flex items-center gap-2 text-base dark:text-gray-300"><i data-feather="activity" class="size-4"></i> Service Wallet</p>
-                            <h4 class="flex items-center gap-4 mt-3 text-2xl font-semibold text-slate-800 dark:text-slate-100">Kes 1,000.25
+                            <h4 class="flex items-center gap-4 mt-3 text-2xl font-semibold text-slate-800 dark:text-slate-100">Kes <?=number_format($service_wallet, 2)?>
                             </h4>
                             <p class="mt-2 text-muted"><span class="font-semibold text-success">2%</span> than last month</p>
                         </div>
                         <div class="card">
                             <p class="flex items-center gap-2 text-base dark:text-gray-300"><i data-feather="truck" class="size-4"></i> Total Balance</p>
-                            <h4 class="flex items-center gap-4 mt-3 text-2xl font-semibold text-slate-800 dark:text-slate-100">Kes 40,050.00
+                            <h4 class="flex items-center gap-4 mt-3 text-2xl font-semibold text-slate-800 dark:text-slate-100">Kes <?=number_format($total_balance, 2)?>
                             </h4>
                             <p class="mt-2 text-muted"><span class="font-semibold text-success">+1.5k</span> than last month</p>
                         </div>
                         <div class="card">
                             <p class="flex items-center gap-2 text-base dark:text-gray-300"><i data-feather="stop-circle" class="size-4"></i> Total Deposits</p>
-                            <h4 class="flex items-center gap-4 mt-3 text-2xl font-semibold text-slate-800 dark:text-slate-100">Kes 1,000.00
+                            <h4 class="flex items-center gap-4 mt-3 text-2xl font-semibold text-slate-800 dark:text-slate-100">Kes <?=number_format($total_deposits, 2)?>
                             </h4>
                             <p class="mt-2 text-muted"><span class="font-semibold text-danger">548</span> than last month</p>
                         </div>
                         <div class="card">
                             <p class="flex items-center gap-2 text-base dark:text-gray-300"><i data-feather="shopping-bag" class="size-4"></i> Total Withdrawals</p>
-                            <h4 class="flex items-center gap-4 mt-3 text-2xl font-semibold text-slate-800 dark:text-slate-100">Kes 1,000.00
+                            <h4 class="flex items-center gap-4 mt-3 text-2xl font-semibold text-slate-800 dark:text-slate-100">Kes <?=number_format($total_withdrawals, 2)?>
                             </h4>
                             <p class="mt-2 text-muted"><span class="font-semibold text-success">+1.7k</span> than last month</p>
                         </div>
@@ -118,15 +128,15 @@
                             </div>
                             <div class="grid grid-cols-3 divide-x md:grid-cols-4 divide-slate-200 dark:divide-darkborder divide-dashed rtl:divide-x-reverse">
                                 <div class="px-4 ltr:first:pl-0 rtl:first:pr-0">
-                                    <h6 class="text-base font-semibold text-slate-800 dark:text-slate-100">1541</h6>
+                                    <h6 class="text-base font-semibold text-slate-800 dark:text-slate-100"><?=$total_users?></h6>
                                     <p>Totals Users</p>
                                 </div>
                                 <div class="px-4 ltr:first:pl-0 rtl:first:pr-0">
-                                    <h6 class="text-base font-semibold text-slate-800 dark:text-slate-100">362</h6>
+                                    <h6 class="text-base font-semibold text-slate-800 dark:text-slate-100"><?=$total_active_users?></h6>
                                     <p>Active Users</p>
                                 </div>
                                 <div class="px-4 ltr:first:pl-0 rtl:first:pr-0">
-                                    <h6 class="text-base font-semibold text-slate-800 dark:text-slate-100">94</h6>
+                                    <h6 class="text-base font-semibold text-slate-800 dark:text-slate-100"><?=$users_joined_today?></h6>
                                     <p>Joined Today</p>
                                 </div>
                             </div>

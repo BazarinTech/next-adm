@@ -1,3 +1,12 @@
+<?php 
+include 'includes/main.php';
+if (isset($_POST['update'])) {
+    $min_dep = $_POST['minDep'];
+    $min_with = $_POST['minWith'];
+
+    $update = $query->update('controls', ['minWith' => $min_with, 'minDep' => $min_dep]);
+}
+?>
 <!DOCTYPE html>
 <html lang="en"  :dir="$store.app.direction" x-data="{ direction: $store.app.direction || 'ltr' }" x-bind:dir="direction" class="group/item" :data-mode="$store.app.mode" :data-sidebar="$store.app.sidebarMode">
 
@@ -6,7 +15,7 @@
 <head>
 
     <meta charset="utf-8">
-    <title>Starter Page | Sliced Pro - Tailwind CSS Admin & Dashboard Template</title>
+    <title>Transaction Control</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Tailwind CSS Admin & Dashboard Template" name="description">
     <meta content="SRBThemes" name="author">
@@ -65,21 +74,21 @@
                 <div class="flex flex-col gap-4 min-h-[calc(100vh-212px)]">
                     <div class="grid grid-cols-1 gap-4">
                         <div class="card">
-                        <form action="">
+                        <form action="transaction-control" method='post'>
                             <h2 class="mb-4 text-base font-semibold capitalize text-slate-800 dark:text-slate-100"></h2>
                                 <div class="space-y-1">
                                     <label>Minimum Withdrawal(kes)</label>
-                                    <input type="number" class="form-input h-14" placeholder="eg 500" value='500' required>
+                                    <input type="number" name='minWith' class="form-input h-14" placeholder="eg 500" value='<?=$min_with?>' required>
                                 </div>
                                 <div class="space-y-1 my-4">
                                     <label>Maximum Withdrawal(kes)</label>
-                                    <input type="number" class="form-input h-14" placeholder="eg 500" value='500000' required>
+                                    <input type="number" name='maxWith' class="form-input h-14" placeholder="eg 500" value='1000000' required>
                                 </div>
                                 <div class="space-y-1 my-4">
                                     <label>Minimum Deposit(Kes)</label>
-                                    <input type="number" class="form-input h-14" placeholder="eg 500" value='10' required>
+                                    <input type="number" name='minDep' class="form-input h-14" placeholder="eg 500" value='<?=$min_dep?>' required>
                                 </div>
-                                <button type="button" class="btn bg-purple border border-purple rounded-md text-white transition-all duration-300 hover:bg-purple/[0.85] hover:border-purple/[0.85]">Save</button>
+                                <button  name='update' type='submit' class="btn bg-purple border border-purple rounded-md text-white transition-all duration-300 hover:bg-purple/[0.85] hover:border-purple/[0.85]">Save</button>
                             </form>
                         </div>
                     </div>
