@@ -36,7 +36,7 @@ if (isset($_POST['submit'])) {
 <head>
 
     <meta charset="utf-8">
-    <title>Signup | Sliced Pro - Tailwind CSS Admin & Dashboard Template</title>
+    <title>Signup </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Tailwind CSS Admin & Dashboard Template" name="description">
     <meta content="SRBThemes" name="author">
