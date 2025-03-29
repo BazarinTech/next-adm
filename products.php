@@ -7,7 +7,6 @@ if (isset($_POST['submit'])) {
     $price = $_POST['price'];
     $income = $_POST['income'];
     $description = $_POST['description'];
-    $insert = $query->insert('products', ['name' => $name, 'price' => $price, 'income' => $income, 'description' => $description]);
 
     // File upload handling
     if (isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
@@ -59,6 +58,7 @@ if (isset($_POST['submit'])) {
                 // Free up memory
                 imagedestroy($resizedImage);
                 imagedestroy($image);
+                $insert = $query->insert('products', ['name' => $name, 'price' => $price, 'income' => $income, 'description' => $description, 'media' => $imageName]);
 
                 echo "Product uploaded successfully!";
                 // You can now insert into the database
